@@ -1,5 +1,10 @@
 import { Construct } from 'constructs';
-import { App, TerraformStack } from 'cdktf';
+import {
+  App,
+  TerraformStack,
+  TerraformOutput,
+} from 'cdktf';
+
 import {
   DigitaloceanProvider,
   Droplet,
@@ -15,11 +20,17 @@ class MyStack extends TerraformStack {
     })
 
     // Configure Droplet
-    new Droplet(this, 'coscup_droplet', {
+    const droplet = new Droplet(this, 'coscup_droplet', {
       name: 'COSCUP-2020-Demo',
       region: 'sgp1',
       image: 'ubuntu-18-04-x64',
       size: 's-1vcpu-1gb'
+    })
+
+    // Show outputs
+    new TerraformOutput(this, 'demo_ip', {
+      value: droplet.ipv4Address,
+      description: 'Demo Droplet IPv4 Address'
     })
 
   }
